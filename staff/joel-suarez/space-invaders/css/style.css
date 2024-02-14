@@ -1,0 +1,81 @@
+body {
+    background-color: #000;
+}
+
+.container {
+    margin-top: 50px;
+    border: 5px solid white;
+    border-radius: 15px;
+}
+
+.game-container {
+    overflow: hidden;
+    width: 1280px;
+    height: 880px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-image: url('https://i.pinimg.com/originals/fd/b2/1c/fdb21c0e4f3dbb6ccd9a63c68fce8645.gif');
+    background-repeat: no-repeat;
+}
+
+.text-center {
+    color: white;
+}
+
+.ship {
+    background-image: url(../img/spaceship.png);
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    background-repeat: no-repeat;
+}
+
+.alien {
+    background-image: url(../img/alien.png);
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 0%;
+    background-repeat: no-repeat;
+}
+
+.shoot {
+    background-color: white;
+    width: 10px;
+    height: 10px;
+    top: 94%;
+    position: absolute;
+}
+
+.alien-shoot {
+    background-color: cyan;
+    width: 10px;
+    height: 10px;
+    top: 94%;
+    position: absolute;
+}
+
+.congrats {
+    margin-top: 20%;
+    font-size: 48px;
+    color: pink;
+    display: none;
+}
+
+.die {
+    margin-top: 20%;
+    font-size: 48px;
+    color: red;
+    display: none;
+}
+
+.obstacles {
+    background-color: white;
+    width: 100px;
+    height: 20px;
+    top: 75%;
+    position: absolute;
+}
