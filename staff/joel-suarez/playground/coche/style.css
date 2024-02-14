@@ -1,0 +1,54 @@
+.body2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: gray;
+}
+
+.car {
+    position: relative;
+    width: 600px;
+    height: 300px;
+}
+
+.bonnet {
+    position: absolute;
+    top: 91px;
+    left: 107px;
+    width: 384px;
+    height: 82px;
+    border-top-right-radius: 100%;
+    border-top-left-radius: 100%;
+    background-color: black;
+}
+
+.chassis {
+    position: absolute;
+    top: 75px;
+    left: 75px;
+    width: 450px;
+    height: 200px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    background-color: #666;
+}
+
+.wheel {
+    position: absolute;
+    bottom: 0;
+    width: 125px;
+    height: 125px;
+    background-color: #333;
+    border-radius: 50%;
+    border: 10px solid #666;
+}
+
+.wheel:nth-child(1) {
+    left: 0;
+}
+
+.wheel:nth-child(3) {
+    right: 0;
+}

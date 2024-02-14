@@ -1,0 +1,30 @@
+.building {
+    width: 800px;
+    margin: 0 auto;
+    background-color: gainsboro;
+    position: relative;
+    padding-bottom: 100px;
+}
+
+.floor {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+}
+
+.window {
+    width: 50px;
+    height: 50px;
+    background-color: #aaf;
+    border: 2px solid #666;
+}
+
+.entrance {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 100px;
+    background-color: #666;
+}
