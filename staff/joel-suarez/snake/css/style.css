@@ -1,0 +1,55 @@
+body {
+    background-color: white;
+}
+
+.container {
+    margin-top: 50px;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.game-container {
+    overflow: hidden;
+    max-width: 880px;
+    height: 880px;
+    position: relative;
+    margin: auto;
+    background-color: white;
+    background-repeat: no-repeat;
+    border: 5px solid black;
+
+}
+
+.text-center {
+    color: black;
+}
+
+.snake {
+    background-color: green;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 90%;
+    left: 50%;
+}
+
+.apple {
+    background-image: url('../img/apple.png');
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    background-repeat: no-repeat;
+}
+
+.bomb {
+    background-image: url('../img/bomba.png');
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    background-repeat: no-repeat;
+}
+
+.container h1,
+.container select {
+    margin-bottom: 20px;
+}
