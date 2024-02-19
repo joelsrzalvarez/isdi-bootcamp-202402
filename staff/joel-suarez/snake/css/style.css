@@ -1,5 +1,6 @@
 body {
     background-color: white;
+    zoom: 80%;
 }
 
 .container {
@@ -20,8 +21,40 @@ body {
 
 }
 
+.ranking-container {
+    overflow: hidden;
+    max-width: 880px;
+    height: 880px;
+    position: relative;
+    margin: auto;
+    background-color: white;
+    background-repeat: no-repeat;
+    border: 5px solid black;
+
+}
+
 .text-center {
     color: black;
+}
+
+.score {
+    color: black;
+    font-size: 24px;
+    text-align: center;
+}
+
+.ranking-title {
+    color: black;
+    font-size: 24px;
+    margin-top: 20%;
+    text-align: center;
+}
+
+.ranking-data {
+    color: black;
+    font-size: 20px;
+    margin-top: 2%;
+    text-align: center;
 }
 
 .snake {
