@@ -1,0 +1,77 @@
+body {
+    background-color: black;
+    zoom: 80%;
+}
+
+.container {
+    margin-top: 50px;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.game-container {
+    overflow: hidden;
+    width: 1280;
+    height: 880px;
+    position: relative;
+    margin: auto;
+    background-color: black;
+    background-repeat: no-repeat;
+    border: 5px solid purple;
+
+}
+
+.text-center {
+    color: white;
+}
+
+.player1 {
+    width: 20px;
+    height: 160px;
+    position: absolute;
+    background-color: green;
+}
+
+.player2 {
+    width: 20px;
+    height: 160px;
+    left: 98.5%;
+    background-color: pink;
+    position: absolute;
+}
+
+.wall {
+    width: 5px;
+    height: 100%;
+    background-color: purple;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.score_player1 {
+    font-size: 24px;
+    position: absolute;
+    left: 48%;
+    color: white;
+}
+
+.score_player2 {
+    font-size: 24px;
+    position: absolute;
+    right: 48%;
+    color: white;
+}
+
+.ball {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    background-color: white;
+    border: 4px solid purple;
+    border-radius: 25px;
+}
