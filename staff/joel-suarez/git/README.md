@@ -10,6 +10,8 @@ $ git add 'folder to add'>
 $ git commit -m "message"
 $ git push
 ```
+- The git add command adds a change in the working directory to the staging area
+- Commits are the core building block units of a Git project timeline
 
 ### How to re-make a git commit
 You add the param ```--ammend``` before ```-m``` and you have to add the param ```-f``` when push this is to force the push.
@@ -47,7 +49,7 @@ $ git checkout "branch"
 ### Delete branch
 Use this command if you want to delete a branch
 ```sh
-$ git delete -D "branch"
+$ git branch -D "branch"
 ```
 
 ### Your branches
