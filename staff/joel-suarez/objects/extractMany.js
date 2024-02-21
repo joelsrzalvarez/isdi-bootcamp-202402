@@ -7,9 +7,21 @@
  * @throws {TypeError} When object is not an object, or when index is not a number.
  */
 function extractMany(object, callback) {
-    // TODO
-}
+    var extracted = {};
+    var length = 0;
 
+    for (var key in object) {
+        if (!!callback(object[key])) {
+            extracted[length] = object[key];
+            length++;
+        } else {
+            object.length--;
+        }
+    }
+
+    extracted.length = length;
+    return extracted;
+}
 console.log('CASE 1: extracts many users form users')
 
 var users = {
