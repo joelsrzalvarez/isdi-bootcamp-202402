@@ -5,3 +5,9 @@ function repeat(str, count) {
     }
     return repeatedString;
 }
+
+// CASE 1
+var s = 'happy! ';
+var result = repeat(s, 3);
+console.assert(result === 'happy! happy! happy! ', 'should return happy! happy! happy! ');
+// 'happy! happy! happy!'

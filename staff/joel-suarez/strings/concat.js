@@ -4,12 +4,13 @@ function concat() {
     var concatenatedString = '';
     for (var i = 0; i < arguments.length; i++) {
         var arg = arguments[i];
-        for (var j = 0; j < arg.length; j++) {
-            concatenatedString += arg[j];
+        if (typeof arg !== 'string') {
+            throw new TypeError('arguments must be strings');
         }
+        concatenatedString += arg;
     }
     return concatenatedString;
 }
 
 // Test
-console.log(concat('hola', ' ', 'mundo')); // Devuelve 'hello world'
+console.assert(concat('hola', ' ', 'mundo') === 'hola mundo', 'result is not as expected'); // test

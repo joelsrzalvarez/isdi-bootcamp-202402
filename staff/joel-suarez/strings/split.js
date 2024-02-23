@@ -19,6 +19,13 @@ function split(str, limit) {
         subStr += str[j];
     }
     result[result.length] = subStr;
-
     return result;
 }
+
+// CASE 1
+
+var s = 'hola mundo';
+var words = split(s, ' ');
+console.log(words);
+console.assert(words === "['hola', 'mundo']", "split should return ['hola', 'mundo']");
+// ['hola', 'mundo']

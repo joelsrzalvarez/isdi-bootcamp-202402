@@ -1,36 +1,26 @@
-function slice(str, start, end) {
-    let slicedString = '';
-    const length = str.length;
-
-    if (start < 0) {
-        start = length + start;
-        if (start < 0) {
-            start = 0;
-        }
-    } else if (start >= length) {
-        start = length;
+function slice(string, indexStart, indexEnd) {
+    var piece = '';
+    if (indexStart > 0) {
+        for (var i = indexStart; i < indexEnd; i++)
+            piece = piece + string[i];
     }
-
-    if (end < 0) {
-        end = length + end;
-        if (end < 0) {
-            end = 0;
+    else {
+        for (var i = string.length + indexStart; i < string.length; i++) {
+            piece = piece + string[i];
         }
     }
-    else if (end > length) {
-        end = length;
-    }
-
-    for (let i = start; i < end; i++) {
-        slicedString += str[i];
-    }
-
-    return slicedString;
+    return piece;
 }
 
-// Ejemplo de uso
-console.log(customSlice('hello world', 3, 7)); // Devuelve 'lo w'
-console.log(customSlice('hello world', 3)); // Devuelve 'lo world' (desde el índice 3 hasta el final)
-console.log(customSlice('hello world', -5, -1)); // Devuelve 'worl'
-console.log(customSlice('hello world', -5)); // Devuelve 'world' (desde el índice -5 hasta el final)
-console.log(customSlice('hello world', 0, 5)); // Devuelve 'hello'
+// CASE 1
+
+var s = 'hola mundo'
+var piece = slice(s, 5, 8);
+console.assert(piece === 'mun', 'slice should return mun instead');
+// 'mun'
+
+// CASE 2
+var s = 'hola mundo'
+var piece = slice(s, -3);
+console.assert(piece === 'ndo', 'slice should return ndo instead');
+// 'ndo'

@@ -9,3 +9,14 @@ function startsWith(searchString, inicio) {
     return true;
 }
 
+// CASE 1
+var s = 'hola mundo'
+var result = startsWith(s, 'hol')
+console.assert(result === true, 'startsWith should return true');
+// true
+
+// CASE 2
+var s = 'hola mundo'
+var result = startsWith(s, 'holo')
+console.assert(result === false, 'startsWith should return false');
+// false

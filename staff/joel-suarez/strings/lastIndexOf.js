@@ -1,4 +1,4 @@
-function customLastIndexOf(str, searchValue, fromIndex) {
+function lastIndexOf(str, searchValue, fromIndex) {
     if (fromIndex === undefined) {
         fromIndex = str.length - 1;
     }
@@ -6,9 +6,6 @@ function customLastIndexOf(str, searchValue, fromIndex) {
         fromIndex = 0;
     }
     else if (fromIndex >= str.length) {
-        /*
-         Si fromIndex es mayor o igual a la longitud de la cadena, lo ajustamos al último índice válido
-         */
         fromIndex = str.length - 1;
     }
 
@@ -18,11 +15,11 @@ function customLastIndexOf(str, searchValue, fromIndex) {
         }
     }
 
-    return false;
+    return -1;
 }
 
-// Ejemplo de uso
-console.log(customLastIndexOf('hello world', 'l')); // Devuelve 9
-console.log(customLastIndexOf('hello world', 'o')); // Devuelve 7
-console.log(customLastIndexOf('hello world', 'o', 5)); // Devuelve 4
-console.log(customLastIndexOf('hello world', 'x')); // Devuelve -1
+// test
+console.assert(lastIndexOf('hello world', 'l') === 9, 'Test case 1 failed');
+console.assert(lastIndexOf('hello world', 'o') === 7, 'Test case 2 failed');
+console.assert(lastIndexOf('hello world', 'o', 5) === 4, 'Test case 3 failed');
+console.assert(lastIndexOf('hello world', 'x') === -1, 'Test case 4 failed');
