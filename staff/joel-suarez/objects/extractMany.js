@@ -1,12 +1,15 @@
 /**
- * Extract manys elements that matches the condition from an iterable object.
+ * Extracts many elements that match the condition from an iterable object.
  *
- * @param object - The iterable object to mutate. 
- * @param index - The index from which to extractMany a value.
+ * @param object - The iterable object to mutate.
+ * @param callback - The function used to filter elements.
+ * @returns {object} - The extracted elements as a new object.
  * 
- * @throws {TypeError} When object is not an object, or when index is not a number.
+ * @throws {TypeError} When object is not an object.
  */
 function extractMany(object, callback) {
+    console.assert(typeof object === 'object', 'El primer argumento debe ser un objeto.');
+
     var extracted = {};
     var length = 0;
 
@@ -22,7 +25,6 @@ function extractMany(object, callback) {
     extracted.length = length;
     return extracted;
 }
-console.log('CASE 1: extracts many users form users')
 
 var users = {
     0: { name: 'Wendy', age: 19 },
@@ -31,27 +33,15 @@ var users = {
     3: { name: 'Campa', age: 30 },
     4: { name: 'James', age: 40 },
     length: 5
-}
+};
 
 var extracted = extractMany(users, function (user) {
-    return user.age > 25
-})
+    return user.age > 25;
+});
 
-console.log(extracted)
-/*
-{
-    0: { name: 'Pepito', age: 50 },
-    1: { name: 'Campa', age: 30 },
-    2: { name: 'James', age: 40 },
-    length: 3
-}
-*/
+console.assert(extracted[0].age === 50, 'primera persona extraida deberia tener una edad mayor a 25.');
+console.assert(extracted[1].age === 30, 'segunda persona extraida deberia tener una edad mayor a 25.');
+console.assert(extracted[2].age === 40, 'tercera persona extraida deberia tener una edad mayor a 25.');
 
-console.log(users)
-/*
-{
-    0: { name: 'Wendy', age: 19 },
-    1: { name: 'Peter', age: 20 },
-    length: 2
-}
-*/
+console.assert(users[0].age === 19, 'La edad de la primera persona no deberia haber cambiado.');
+console.assert(users[1].age === 20, 'La edad de la segunda persona no deberia haber cambiado.');

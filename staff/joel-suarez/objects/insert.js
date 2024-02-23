@@ -1,97 +1,93 @@
 /**
- * Inserts an element in iterable object at specfified index.
+ * Inserts an element in an iterable object at the specified index.
  *
- * @param object - The iterable object to mutate. 
+ * @param object - The iterable object to mutate.
  * @param index - The index from which to insert the given values.
  * @param value - The value to insert.
+ * @returns - The updated length of the object.
  * 
  * @throws {TypeError} When object is not an object, or when index is not a number.
  */
-function insert(object, index, ...values) {
-    if (!object || !(object instanceof Object)) {
-        throw new TypeError('Object parameter is required and must be an Object');
-    }
-    if (typeof index !== 'number') {
-        throw new TypeError('Index parameter is required and must be a number');
-    }
-    var originalLength = object.length;
-    var numValues = values.length;
+function insert(object, index, value) {
+    console.assert(object instanceof Object, object + ' is not an Object');
+    console.assert(typeof index === 'number', index + ' is not a Number');
 
-    // mover los elementos hacia la derecha para hacer espacio para los nuevos valores
-    for (var i = originalLength + numValues - 1; i > index + numValues - 1; i--) {
-        object[i] = object[i - numValues];
+    for (var i = object.length; i > index; i--) {
+        object[i] = object[i - 1];
     }
 
-    // insertar los nuevos valores en el objeto en la posicion que le decimos
-    for (var j = 0; j < numValues; j++) {
-        object[index + j] = values[j];
-    }
+    object[index] = value;
 
-    // aumentar la propiedad length
-    object.length += numValues;
+    object.length++;
+
+    return object.length;
 }
-console.log('CASE 1: insert skyblue in index 1'); // LOGRADO
+
+console.log('CASE 1: insert skyblue in index 1');
 
 var colors = {
     0: 'red',
     1: 'blue',
     2: 'green',
     length: 3
-}
+};
 
 var length = insert(colors, 1, 'skyblue');
 
-console.log(length)
-// 4
+console.assert(length === 4, 'Returned length is incorrect');
+console.assert(colors[1] === 'skyblue', 'Value not inserted correctly');
 
-console.log(colors)
+//console.log(colors);
 
-console.log('CASE 2: insert skyblue, gold and plum in index 2') // LOGRADO
+console.log('CASE 2: insert 300, at index 2');
+
+var nums = {
+    0: 100,
+    1: 200,
+    2: 400,
+    3: 500,
+    4: 600,
+    5: 700,
+    length: 6
+};
+
+var length = insert(nums, 2, 300);
+
+console.assert(length === 7, 'Returned length is incorrect');
+console.assert(nums[2] === 300, 'Value not inserted correctly');
+
+//console.log(nums);
+
+console.log('CASE 3: fails on undefined object parameter');
+
+try {
+    insert();
+} catch (error) {
+    console.assert(error instanceof TypeError, 'Error should be a TypeError');
+    //console.log(error.message);
+}
+
+console.log('CASE 4: fails on 1 as an object parameter');
+
+try {
+    insert(1);
+} catch (error) {
+    console.assert(error instanceof TypeError, 'Error should be a TypeError');
+    //console.log(error.message);
+}
+
+console.log('CASE 5: fails on undefined as index parameter');
 
 var colors = {
     0: 'red',
     1: 'blue',
     2: 'green',
     length: 3
-}
-
-var length = insert(colors, 2, 'skyblue', 'gold', 'plum')
-
-console.log(length)
-// 6
-
-console.log(colors)
-
-console.log('CASE 3: fails on undefind object parameter')  // LOGRADO
+};
 
 try {
-    insert(undefined, 2, 'skyblue', 'gold', 'plum');
+    insert(colors);
 } catch (error) {
-    console.log(error)
-    // TypeError: undefined is not an Object
-}
-
-console.log('CASE 4: fails on 1 as a object parameter') //logrado
-
-try {
-    insert(null, 2, 'skyblue', 'gold', 'plum');
-} catch (error) {
-    console.log(error)
-    // TypeError: 1 is not an Object
-}
-
-console.log('CASE 5: fails on undefined as index parameter') // logrado
-
-var colors = {
-    0: 'red',
-    1: 'blue',
-    2: 'green',
-    length: 3
-}
-
-try {
-    insert(colors)
-} catch (error) {
-    console.log(error)
-    // TypeError: undefined is not a Number
+    console.assert(error instanceof TypeError, 'Error should be a TypeError');
+    //console.log(error.message);
 }

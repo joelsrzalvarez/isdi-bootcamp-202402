@@ -15,4 +15,4 @@ var colors = {
 };
 
 var index = indexOf(colors, 'blue');
-console.log(index); 
+console.assert(colors[1] === 'blue', 'primera posicion deberia ser blue');

@@ -1,16 +1,17 @@
+/**
+ * Removes an element from an iterable object at the specified index.
+ *
+ * @param object - The iterable object to mutate.
+ * @param index - The index from which to remove the element.
+ * @returns - The removed element.
+ * 
+ * @throws {TypeError} When object is undefined or not an object, or when index is not a number.
+ */
 function remove(object, index) {
-    if (typeof object === 'undefined') {
-        throw new TypeError('Object is undefined');
-    }
-    if (typeof object === 'number' && object === 1) {
-        throw new TypeError('Invalid argument: 1 is not a valid object');
-    }
-    if (typeof index !== 'number') {
-        throw new TypeError('Index parameter is required and must be a number');
-    }
-    if (!(object instanceof Object)) {
-        throw new TypeError(object + ' is not an Object');
-    }
+    console.assert(typeof object !== 'undefined', 'Object is undefined');
+    console.assert(typeof object === 'object', object + ' is not an Object');
+    console.assert(typeof index === 'number', 'Index parameter is required and must be a number');
+
     var removedItem = object[index];
     delete object[index];
     // si el indice es valido y hemos eliminado el elemento, decrementamos la propiedad length
@@ -30,60 +31,53 @@ var colors = {
 };
 
 var removed = remove(colors, 1);
-console.log(removed); // 'blue'
+console.assert(removed === 'blue', 'Removed item is incorrect');
+console.assert(colors[1] === undefined, 'Item not removed correctly');
 
-// 'blue'
-console.log(colors)
-/*
-{
-    0: 'red',
-    1: 'green',
-    length: 2
-}
-*/
+//console.log(colors);
 
 console.log('CASE 2: remove red from index 0'); // logrado
+
 var colors = {
     0: 'red',
     1: 'blue',
     2: 'green',
     length: 3
 }
-var length = remove(colors, 0)
-console.log(length)
-// 'red'
-console.log(colors)
-/*
-{
-    0: 'blue',
-    1: 'green',
-    length: 2
-}
-*/
+var removed = remove(colors, 0);
+console.assert(removed === 'red', 'Removed item is incorrect');
+console.assert(colors[0] === undefined && colors[1] === 'blue', 'Item not removed correctly');
+
+//console.log(colors);
+
 console.log('CASE 3: fails on undefind object parameter') //logrado
 try {
     remove();
 } catch (error) {
-    console.log(error)
-    // TypeError: undefined is not an Object
+    console.assert(error instanceof TypeError, 'Error should be a TypeError');
+    //console.log(error.message);
 }
+
 console.log('CASE 4: fails on 1 as an object parameter') // logrado
 try {
-    remove(1)
+    remove(1);
 } catch (error) {
-    console.log(error)
-    // TypeError: 1 is not an Object
+    console.assert(error instanceof TypeError, 'Error should be a TypeError');
+    //console.log(error.message);
 }
+
 console.log('CASE 5: fails on undefined as index parameter') // logrado
+
 var colors = {
     0: 'red',
     1: 'blue',
     2: 'green',
     length: 3
 }
+
 try {
-    remove(colors)
+    remove(colors);
 } catch (error) {
-    console.log(error)
-    // TypeError: undefined is not a Number
+    console.assert(error instanceof TypeError, 'Error should be a TypeError');
+    //console.log(error.message);
 }

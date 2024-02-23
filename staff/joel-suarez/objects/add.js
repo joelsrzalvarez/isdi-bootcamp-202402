@@ -1,8 +1,9 @@
-function add(obj, index, value) {
+function add(obj, value) {
     var lastIndex = 0;
     for (var key in obj) {
-        if (key && key >= lastIndex) {
-            lastIndex = key + 1;
+        var numericKey = parseInt(key);
+        if (!isNaN(numericKey) && numericKey >= lastIndex) {
+            lastIndex = numericKey + 1;
         }
     }
     obj[lastIndex] = value;
@@ -16,5 +17,10 @@ var colors = {
     length: 3
 };
 
-push(colors, 'yellow');
-console.log(colors); // Debería imprimir {0: 'red', 1: 'blue', 2: 'green', 3: 'yellow', length: 4}
+add(colors, 'yellow');
+
+for (var cont = 0; cont < colors.length; cont++) {
+    console.assert(colors[cont] === colors[cont], 'Color incorrecto al añadirlo al objeto');
+}
+
+console.assert(colors.length === 4, 'Propiedad length actualizada incorrectamente');
