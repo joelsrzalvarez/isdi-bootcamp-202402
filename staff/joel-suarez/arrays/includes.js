@@ -1,32 +1,69 @@
-function includes(searchElement, fromIndex) {
-    var startIndex;
-    fromIndex = fromIndex || 0;
-    if (fromIndex >= 0) {
-        startIndex = fromIndex;
-    } else {
-        startIndex = searchElement.length + fromIndex;
+function includes(array, value, fromIndex) {
+    var targetIndex;
+
+    if (arguments.length < 3)
+        targetIndex = 0;
+    else {
+        if (fromIndex > -1)
+            targetIndex = fromIndex;
+        else
+            targetIndex = array.length + fromIndex;
     }
 
-    if (startIndex >= 0) {
-        startIndex = startIndex;
-    } else {
-        startIndex = 0;
-    }
-    for (var i = startIndex; i < searchElement.length; i++) {
-        if (searchElement[i] === searchElement) {
+    for (var i = targetIndex; i < array.length; i++) {
+        var element = array[i];
+        if (element === value) {
             return true;
         }
     }
-    return false;
+
+    return false
 }
 
-var arr = ["a", "b", "c"];
-console.log(includes(arr, "c", 3)); // Salida esperada: false
-console.log(includes(arr, "c", 2)); // Salida esperada: true
+//CASE 1
+var nums = [100, 200, 300, 400, 500];
+var result = includes(nums, 600);
+console.assert(result === false, 'case 1 expected to be false');
+// false
 
-var arr = ["a", "b", "c"];
-includes("c", 3);
-// Ejemplo de uso
-var arr = [1, 2, 3];
-console.log(includes(arr, 2)); // Devuelve true
-console.log(includes(arr, 4)); // Devuelve false
+//CASE 2
+var animals = ['pigs', 'goats', 'sheep', 'cows'];
+var result = includes(animals, 'sheep');
+console.assert(result === true, 'case 2 expected to be true');
+// true
+
+//CASE 3
+var nums = [10, 20, 30];
+var result = includes(nums, 30, 3);
+console.assert(result === false, 'case 3 expected to be false');
+// false
+
+//CASE 4
+var nums = [10, 20, 30];
+var result = includes(nums, 30, 1);
+console.assert(result === true, 'case 4 expected to be true');
+// true
+
+//CASE 5
+var animals = ['pigs', 'goats', 'sheep', 'cows'];
+var result = includes(animals, 'cows', 2);
+console.assert(result === true, 'case 5 expected to be true');
+// true
+
+//CASE 6
+var animals = ['pigs', 'goats', 'sheep', 'cows'];
+var result = includes(animals, 'goats', 2);
+console.assert(result === false, 'case 6 expected to be false');
+// false
+
+// CASE 7
+var animals = ['pigs', 'goats', 'sheep', 'cows']
+var result = includes(animals, 'goats', -3)
+console.assert(result === true, 'case 7 expected to be true');
+// true
+
+//CASE 8
+var animals = ['pigs', 'goats', 'sheep', 'cows']
+var result = includes(animals, 'goats', -2)
+console.assert(result === false, 'case 8 expected to be true');
+// false

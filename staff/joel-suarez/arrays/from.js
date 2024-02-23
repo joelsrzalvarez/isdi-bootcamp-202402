@@ -9,5 +9,5 @@ function from() {
     }
     return newArray;
 }
-// test
-console.log(from('hola')); // output ['h', 'o', 'l', 'a']
+
+console.assert(JSON.stringify(from('hola')) === JSON.stringify(['h', 'o', 'l', 'a']), "Output should be ['h', 'o', 'l', 'a']");
