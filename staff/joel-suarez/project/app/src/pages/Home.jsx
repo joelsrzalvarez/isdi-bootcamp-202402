@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import CreateCharacterForm from '../components/CreateCharacterForm';
 import retrieveCharacter from '../logic/retrieveCharacter';
 import deleteCharacter from '../logic/deleteCharacter';
-import Game from '../components/Game';
+import Game from '../components/Game/Game';
 import decryptToken from '../logic/decryptToken';
 
 function Home() {
@@ -13,6 +13,7 @@ function Home() {
     const [socket, setSocket] = useState(null);
     const [gameFound, setGameFound] = useState(false);
     const [showCountdown, setShowCountdown] = useState(false);
+    const [gameStart, setGameStart] = useState(false);
     const [countdown, setCountdown] = useState(5);
 
 
@@ -100,6 +101,7 @@ function Home() {
             setCountdown((prevCountdown) => {
                 if (prevCountdown <= 1) {
                     clearInterval(intervalId);
+                    setGameStart(true)
                     return 0;
                 }
                 if(prevCountdown === 0) {
@@ -109,6 +111,10 @@ function Home() {
             });
         }, 1000);
     };
+
+    if(gameStart) {
+        return <Game/>
+    }
     
     return (
         <div className="form-home">

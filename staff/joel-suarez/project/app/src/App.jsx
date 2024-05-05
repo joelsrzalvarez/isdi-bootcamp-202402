@@ -1,5 +1,5 @@
+// App.jsx
 import { logger } from './utils'
-
 import logic from './logic'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -11,13 +11,16 @@ import { Context } from './context'
 import Confirm from './components/Confirm'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import Game from './components/Game/Game'
 import { errors } from 'com'
+import { LayoutProvider, useLayout } from './LayoutContext';
 
 const { UnauthorizedError } = errors
 
 function App() {
   const [feedback, setFeedback] = useState(null)
   const [confirm, setConfirm] = useState(null)
+  const { showLayout } = useLayout();
 
   const navigate = useNavigate()
 
@@ -61,21 +64,19 @@ function App() {
 
   logger.debug('App -> render')
 
-  return <>
-    <Context.Provider value={{ showFeedback: handleFeedback, showConfirm: handleConfirm }}>
-    <Navbar onUserLoggedOut={handleUserLoggedOut} />
-      <Routes>
-        <Route path="/login" element={logic.isUserLoggedIn() ? <Navigate to="/" /> : <Login onRegisterClick={handleRegisterClick} onUserLoggedIn={handleUserLoggedIn} />} />
-        <Route path="/register" element={logic.isUserLoggedIn() ? <Navigate to="/" /> : <Register onLoginClick={handleLoginClick} onUserRegistered={handleLoginClick} />} />
-        <Route path="/*" element={logic.isUserLoggedIn() ? <Home onUserLoggedOut={handleUserLoggedOut} /> : <Navigate to="/login" />} />
-      </Routes>
-      <Footer/>
-    </Context.Provider>
-
-    {feedback && <Feedback message={feedback.message} level={feedback.level} onAcceptClick={handleFeedbackAcceptClick} />}
-
-    {confirm && <Confirm message="hola confirm" onCancelClick={handleConfirmCancelClick} onAcceptClick={handleConfirmAcceptClick} />}
-  </>
+  return (
+      <Context.Provider value={{ showFeedback: handleFeedback, showConfirm: handleConfirm }}>
+        {showLayout && <Navbar onUserLoggedOut={handleUserLoggedOut} />}
+        <Routes>
+          <Route path="/login" element={logic.isUserLoggedIn() ? <Navigate to="/" /> : <Login onRegisterClick={handleRegisterClick} onUserLoggedIn={handleUserLoggedIn} />} />
+          <Route path="/register" element={logic.isUserLoggedIn() ? <Navigate to="/" /> : <Register onLoginClick={handleLoginClick} onUserRegistered={handleLoginClick} />} />
+          <Route path="/game" element={<Game />} />
+          <Route path="/*" element={logic.isUserLoggedIn() ? <Home onUserLoggedOut={handleUserLoggedOut} /> : <Navigate to="/login" />} />
+        </Routes>
+        {showLayout && <Footer />}
+      {feedback && <Feedback mess age={feedback.message} level={feedback.level} onAcceptClick={handleFeedbackAcceptClick} />}
+      {confirm && <Confirm message="hola confirm" onCancelClick={handleConfirmCancelClick} onAcceptClick={handleConfirmAcceptClick} />}
+      </Context.Provider>
+  );
 }
-
-export default App
+export default App;
