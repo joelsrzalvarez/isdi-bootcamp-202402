@@ -11,7 +11,6 @@ function deleteCharacter(idDelete) {
     })
     .then(res => {
         if (res.ok) {
-            console.log('Character deleted successfully', res.status);
             return res.json();
         } else {
             throw new Error(`Failed to delete, error status: ${res.status}`);
