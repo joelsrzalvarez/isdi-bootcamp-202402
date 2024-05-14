@@ -4,7 +4,7 @@ import authenticateUser from './authenticateUser.ts'
 import retrieveUser from './retrieveUser.ts'
 import retrieveCharacter from './retrieveCharacter.ts'
 import deleteCharacter from './deleteCharacter.ts'
-import { handleMatchMaking, removePlayer } from './findMatch';
+import { handleMatchMaking } from './findMatch';
 
 const logic = {
     registerUser,
@@ -13,8 +13,7 @@ const logic = {
     retrieveUser,
     retrieveCharacter,
     deleteCharacter,
-    handleMatchMaking,
-    removePlayer
+    handleMatchMaking
 }
 
 export default logic

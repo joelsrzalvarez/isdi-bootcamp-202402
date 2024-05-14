@@ -2,70 +2,58 @@ import { Server, Socket } from "socket.io";
 
 interface Room {
   id: string;
-  players: string[];
+  players: { id: string, socket: Socket} [];
 }
 
-const players: Room[] = [];
-const searchingPlayers = new Set();
+const rooms: Room[] = [];
 const maxPlayersPerRoom = 2;
+//const roomsTimers = {};
 
-export const handleMatchMaking = (io: Server, socket: Socket): void => {
-    if (searchingPlayers.has(socket.id)) {
-        console.log(`User ${socket.id} already searching for a match`);
-        return;
-    }
+export const handleMatchMaking = (io: Server, socket: Socket, idPlayer: string): void => {
+    console.log(`User ${idPlayer} is looking for a match`);
 
-    searchingPlayers.add(socket.id);
-    console.log(`User ${socket.id} is looking for a match`);
-
-    let availableRoom = players.find(p => p.players.length < maxPlayersPerRoom);
+    let availableRoom = rooms.find(p => p.players.length < maxPlayersPerRoom);
     if (availableRoom) {
-        availableRoom.players.push(socket.id);
-        socket.join(availableRoom.id);
-
-        // Emit to the joining player that they are a guest
-        io.to(socket.id).emit('roleAssigned', { role: 'guest', roomId: availableRoom.id });
+        availableRoom.players.push({id:idPlayer, socket: socket});
+       // socket.join(availableRoom.id);
 
         if (availableRoom.players.length === maxPlayersPerRoom) {
-            // Emit to the host that the match is found and assign roles
-            const hostId = availableRoom.players[0]; // The first one who created the room
-            io.to(hostId).emit('roleAssigned', { role: 'host', roomId: availableRoom.id });
-            
-            io.to(availableRoom.id).emit('matchFound', {
-                message: `Match found in room ${availableRoom.id}`,
+            io.emit('start', {
                 roomId: availableRoom.id,
-                players: availableRoom.players
+                players: availableRoom.players.map(player => player.id),
+                message: `Match found in room ${availableRoom.id}`
             });
+
+            // let countdown = 6;
+            // roomsTimers[availableRoom.id] = setInterval(() => {
+            //     countdown--;
+            //     //console.log(`Room ${availableRoom.id} - Time left: ${countdown} seconds`);
+            //     //io.to(availableRoom.id).emit('timer', { countdown });
+            //     // if (countdown <= 0) {
+            //     //     clearInterval(roomsTimers[availableRoom.id]);
+            //     //     delete roomsTimers[availableRoom.id];
+            //     //     io.to(availableRoom.id).emit('endGame', { message: 'Game finished!' });
+            //     //     delete availableRoom.id;
+            //     //     console.log(`Game in room ${availableRoom.id} has ended.`);
+            //     // }
+            // }, 1000);
+            
+            availableRoom.players.forEach(player => {
+                player.socket.on('moveBox', (data) => {
+                    const { roomId, playerId, direction, positionX } = data;
+                    console.log(`Player ${playerId} in room ${roomId} is moving ${direction} to ${positionX}`);
+    
+                    //const room  = rooms.find(room => room.players.some(player => player.id === playerId))
+                    //const player = room.players.find(player => player.id !== playerId)
+                    //console.log(player.socket, { playerId, direction, positionX })
+    
+                    player.socket.broadcast.emit('boxMoved', { playerId, direction, positionX })
+                });
+            })
         }
     } else {
         const newRoomId = `room_${Math.floor(Math.random() * 100000) + 1}`;
-        players.push({ id: newRoomId, players: [socket.id] });
-        socket.join(newRoomId);
-
-        // Emit to the creator of the room that they are the host
-        io.to(socket.id).emit('roleAssigned', { role: 'host', roomId: newRoomId });
-    }
-};
-
-
-export const removePlayer = (socketId: string): void => {
-    let roomIndex = -1;
-    players.forEach((room, index) => {
-        const playerIndex = room.players.indexOf(socketId);
-        if (playerIndex !== -1) {
-            room.players.splice(playerIndex, 1);
-            console.log(`Player ${socketId} removed from room ${room.id}`);
-            if (room.players.length === 0) {
-                roomIndex = index;
-            }
-        }
-    });
-    if (roomIndex !== -1) {
-        players.splice(roomIndex, 1);
-        console.log(`Room ${players[roomIndex].id} removed as it's now empty`);
-    }
-    if (searchingPlayers.has(socketId)) {
-        searchingPlayers.delete(socketId);
-        console.log(`Player ${socketId} removed from search list`);
+        rooms.push({ id: newRoomId, players: [{id: idPlayer, socket: socket}] });
+        //socket.join(newRoomId);
     }
 };

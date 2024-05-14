@@ -1,39 +1,53 @@
+import Fighter from './Fighter.js'
+
+const canvas = document.querySelector('canvas');
+const c = canvas.getContext('2d');
+
 class Sprite {
-    constructor({ position, imageSrc, scale = 1, maxFrames = 1 }) {
+    constructor({ position, imageSrc, scale = 1, maxFrames = 1, holdFrames = 30, offsetFrame = { x: 0, y: 0 } }) {
         this.position = position;
-        this.scale = scale;
-        this.maxFrames = maxFrames;
-        this.currentFrame = 0;
+        this.height = 150;
+        this.width = 50;
         this.image = new Image();
-        this.image.onload = () => {
-            console.log(`Image loaded successfully: ${imageSrc}`);
-            this.imageLoaded = true;
-        };
-        this.image.onerror = () => {
-            console.error(`Failed to load image at ${imageSrc}`);
-            this.imageLoaded = false;
-        };
         this.image.src = imageSrc;
+        this.scale = scale;
+        this.maxFrames = maxFrames;     // Maximum image's frames.
+        this.currentFrame = 0;          // Start of the animation.
+        this.elapsedFrames = 0;         // How many frames have passed. Used for a smoother animation.
+        this.holdFrames = holdFrames;   // How many frames to wait until update the image with another frame. Used for a smoother animation.
+        this.offsetFrame = offsetFrame;
     }
 
-    draw(c) {
-        if (this.imageLoaded) {
-            let frameWidth = this.image.width / this.maxFrames;
-            let frameHeight = this.image.height;
-            c.drawImage(
-                this.image,
-                this.currentFrame * frameWidth, 0, frameWidth, frameHeight,
-                this.position.x, this.position.y,
-                frameWidth * this.scale, frameHeight * this.scale
-            );
-        } else {
-            console.log('Image not loaded');
+    // Draw the sprites in the canvas.
+    draw() {
+        // Draw the image in the canvas with his crop properties
+        c.drawImage(this.image, this.currentFrame * (this.image.width / this.maxFrames), 0, this.image.width / this.maxFrames,
+            this.image.height, this.position.x - this.offsetFrame.x, this.position.y - this.offsetFrame.y,
+            (this.image.width / this.maxFrames) * this.scale, this.image.height * this.scale);
+    }
+
+    animateFrames() {
+        this.elapsedFrames++;
+        // Update the current frame only if we waited holdFrames.
+        if (this.elapsedFrames % this.holdFrames === 0) {
+            if (this.currentFrame < this.maxFrames - 1) {
+                this.currentFrame++;    // Jump to the next frame.
+            } else {
+                if (this instanceof Fighter) { 
+                    if (this.health > 0) {  // This avoids resetting death animation.
+                        this.currentFrame = 0;  // Reset the current fighter frame to the beginning of the animation.
+                    }
+                } else {
+                    this.currentFrame = 0;  // Reset the current sprite frame to the beginning of the animation.
+                }
+            }
         }
     }
 
-    update(c) {
-        this.draw(c);
-        this.currentFrame = (this.currentFrame + 1) % this.maxFrames;
+    // Update the sprite every frame.
+    update() {
+        this.draw();
+        this.animateFrames();
     }
 }
 

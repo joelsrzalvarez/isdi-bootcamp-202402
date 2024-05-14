@@ -187,7 +187,6 @@ mongoose.connect(MONGODB_URL)
     
         try {
             await logic.deleteCharacter(id);
-            logger.info('Character deleted successfully');
             res.status(200).json({ message: 'Character deleted successfully' });
         } catch (error) {
             if (error instanceof NotFoundError) {
@@ -215,19 +214,33 @@ mongoose.connect(MONGODB_URL)
     });
 
     io.on('connection', (socket) => {
-        logger.info(`A user connected with ID: ${socket.id}`);
+        console.log(socket.id);
+        let globalRoomId = '';
+        // socket.on('startGame', (roomId) => {
+        //     console.log(`Starting game in room: ${roomId}`);
+        //     let timeLeft = 60;
+        //     const timerId = setInterval(() => {
+        //         timeLeft--;
+        //         io.to(roomId).emit('timer', { timeLeft });
+    
+        //         if (timeLeft <= 0) {
+        //             clearInterval(timerId);
+        //             io.to(roomId).emit('timeUp', { message: 'Time is up!' });
+        //         }
+        //     }, 1000);
+        // });
 
-        socket.on('findMatch', () => {
-            logic.handleMatchMaking(io, socket);
-            logger.info(`User ${socket.id} is looking for a match`);
-        });
-
+        socket.on('findMatch', (idPlayer) => {
+            logic.handleMatchMaking(io, socket, idPlayer);
+        });     
+    
         socket.on('disconnect', () => {
             logger.info(`User ${socket.id} has disconnected`);
         });
-    });
-
-    server.listen(PORT, () => logger.info(`API listening on port ${PORT}`))
+    });    
+    
+    server.listen(PORT, () => logger.info(`API listening on port ${PORT}`));
+    
 })
 .catch(error => logger.error(error))
 

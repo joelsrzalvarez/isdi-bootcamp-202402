@@ -24,7 +24,6 @@ function Navbar({ onUserLoggedOut }) {
             logic.retrieveUser(token)
                 .then(usuario => {
                     setUser(usuario);
-                    logger.debug('Usuario cargado:', usuario);
                 })
                 .catch(error => {
                     logger.error('Error al recuperar usuario:', error);
