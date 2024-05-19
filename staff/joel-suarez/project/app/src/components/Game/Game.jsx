@@ -51,8 +51,11 @@ function Game({ socket, roomId, characterIds, characters, players }) {
                 socket.emit('moveBox', { playerId: currentPlayerId, direction: 'right', positionX: newPosition });
             } else if (event.key === ' ' || event.key === 'SPACE') {
                 playerRef.current.handleAction('attack');
+                socket.emit('sendAttack', {playerId: currentPlayerId});
                 if (playerRef.current.isHitting(targetRef.current)) {
                     socket.emit('attack', { playerId: currentPlayerId, roomId, targetId });
+                    socket.emit('sendHit', {playerId: currentPlayerId});
+                    targetRef.current.handleAction('hit');
                 }
             }
         };
@@ -99,11 +102,25 @@ function Game({ socket, roomId, characterIds, characters, players }) {
                     guestRef.current.handleAction('idle');
                 }, guestRef.current.sprites.takeHit.maxFrames * guestRef.current.holdFrames * 1000 / 60);
             }
+        });
 
+        socket.on('playerAttack', data => {
+            const {playerId} = data;
+            console.log(playerId);
             if (playerId === idHost) {
-                guestRef.current.handleAction('attack');
-            } else if (playerId === idGuest) {
                 hostRef.current.handleAction('attack');
+            } else if (playerId === idGuest) {
+                guestRef.current.handleAction('attack');
+            }
+        });
+
+        socket.on('playerHit', data => {
+            const {playerId} = data;
+            console.log(playerId);
+            if (playerId === idHost) {
+                guestRef.current.handleAction('hit');
+            } else if (playerId === idGuest) {
+                hostRef.current.handleAction('hit');
             }
         });
 

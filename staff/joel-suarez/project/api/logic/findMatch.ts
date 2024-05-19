@@ -24,14 +24,11 @@ export const handleMatchMaking = (io: Server, socket: Socket, idPlayer: string):
 
             availableRoom.players.forEach(player => {
                 player.socket.on('moveBox', (data) => {
-                    const { roomId, playerId, direction, positionX } = data;
-                    console.log(`Player ${playerId} in room ${roomId} is moving ${direction} to ${positionX}`);
-
+                    const { playerId, direction, positionX } = data;
                     player.socket.broadcast.emit('boxMoved', { playerId, direction, positionX });
                 });
 
                 player.socket.on('attack', ({ playerId, roomId, targetId }) => {
-                    console.log(`Player ${playerId} in room ${roomId} is attacking ${targetId}`);
                     const room = rooms.find(r => r.id === roomId);
                     if (room) {
                         const target = room.players.find(p => p.id === targetId);
@@ -43,15 +40,17 @@ export const handleMatchMaking = (io: Server, socket: Socket, idPlayer: string):
                             const guest = room.players.find(p => p.id === availableRoom.players[1].id);
                             console.log(`Host health: ${host.health}, Guest health: ${guest.health}`);
 
-                            console.log(`jugador atacando: ${playerId}`);
                             player.socket.broadcast.emit('attack', { playerId });
                         }
                     }
                 });
 
-                player.socket.on('playerHit', ({playerId, roomid, targetId}) => {
-                    console.log(`jugador recibiendo dano: ${targetId}`);
-                    player.socket.broadcast.emit('playerHit', { playerId: targetId });
+                player.socket.on('sendAttack', ({playerId}) => {
+                    player.socket.broadcast.emit('playerAttack', { playerId});
+                });
+
+                player.socket.on('sendHit', ({playerId}) => {
+                    player.socket.broadcast.emit('playerHit', { playerId});
                 });
             });
         }

@@ -40,9 +40,7 @@ class Fighter extends Sprite {
         this.attackBox.position.y = this.position.y + this.attackBox.offSet.y;
     }
 
-    switchSprite(sprite) {
-        if (this.state === sprite) return; 
-        this.state = sprite;
+    switchSprite(sprite) {;
         if (this.image === this.sprites[sprite].image) return;
         this.image = this.sprites[sprite].image;
         this.maxFrames = this.sprites[sprite].maxFrames;
