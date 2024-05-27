@@ -14,15 +14,20 @@ html, body {
 .hud {
     position: absolute;
     color: white;
-    width: 50%;
+    width: 100%;
+    top: 10px; /* Ajusta la distancia desde la parte superior */
     align-items: center;
-    padding: 20px;
     display: flex;
     justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .healthSection {
-    width: 48%;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .playerInfo {
@@ -47,23 +52,21 @@ html, body {
     position: absolute;
     background-color: #009e00;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
-    display: flex;
+    height: 100%;
+    width: 100%;
 }
 
 .timer {
     background-color: wheat;
     font-family: 'silver';
-    font-size: 35px;
+    font-size: 2vw; /* Cambiado a unidades relativas */
     height: 50px;
     width: 75px;
     flex-shrink: 0;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
-    flex-grow: 1;
     text-align: center; 
 }
 

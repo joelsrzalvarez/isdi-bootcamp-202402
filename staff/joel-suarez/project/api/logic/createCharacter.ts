@@ -1,28 +1,38 @@
 import { validate, errors } from 'com';
-import { CreateCharacterType, Character } from '../data/index';
+import { Character } from '../data/index.ts';
 import mongoose from 'mongoose';
 
 const { DuplicityError, SystemError } = errors;
 
-function createCharacter(name: string, clase: string, win_streak: string, max_win_streak: string, userId: mongoose.Types.ObjectId) {
+async function createCharacter(name: string, clase: string, win_streak: number, max_win_streak: number, userId: mongoose.Types.ObjectId) {
     validate.text(name, 'name');
     validate.text(clase, 'clase');
-    validate.text(win_streak, 'win_streak');
-    validate.text(max_win_streak, 'max_win_streak');
+
+    if (win_streak !== 0 || max_win_streak !== 0) {
+        throw new SystemError('win_streak and max_win_streak must be 0 when creating a character');
+    }
+
+    const validClasses = ['warrior', 'mage', 'assassin'];
+    if (!validClasses.includes(clase.toLowerCase())) {
+        throw new SystemError('Invalid class provided');
+    }
 
     try {
-        const characterExists = Character.findOne({ name, user_id: userId });
-        console.log(characterExists);
+        const characterExists = await Character.findOne({ name, user_id: userId });
+
+        if (characterExists) {
+            throw new DuplicityError('Character with this name already exists for the given user');
+        }
 
         const newCharacter = {
             name: name.trim(),
             clase,
-            win_streak: "0",
-            max_win_streak: "0",
+            win_streak: 0,
+            max_win_streak: 0,
             user_id: userId,
         };
 
-        return Character.create(newCharacter); 
+        await Character.create(newCharacter); 
     } catch (error) {
         if (error instanceof mongoose.Error.ValidationError) {
             throw new SystemError('Validation error in creating character');

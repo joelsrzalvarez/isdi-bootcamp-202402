@@ -13,9 +13,11 @@ function Register ({onUserRegistered, onLoginClick}) {
         const surname = form.surname.value
         const email = form.email.value
         const password = form.password.value
+        const honor_points = 0
+        const arena_points = 0
 
         try {
-            logic.registerUser(name, surname, email, password)
+            logic.registerUser(name, surname, email, password, honor_points, arena_points)
             .then(() => {
                     form.reset()
 
@@ -35,7 +37,7 @@ function Register ({onUserRegistered, onLoginClick}) {
 
         return (
             <div className="row justify-content-center">
-              <div className="col-md-6">
+              <div className="col-md-3">
               <form className='form-login' onSubmit={handleSubmit}>
                 <h2 className="text-center mb-4" id='text-modal'>Register</h2>
                 <hr id='hr-modal'></hr>
@@ -59,7 +61,7 @@ function Register ({onUserRegistered, onLoginClick}) {
                   </div>
                   <button type="submit" className="btn btn-primary w-100">Register</button>
                   <div className="text-center mt-2">
-                    <a style={{ color: 'orange' }} onClick={handleLoginClick}>Do you have an account? <strong>Click here</strong> to Log In</a>
+                    <a style={{ color: '#68daf7' }} onClick={handleLoginClick}>Do you have an account? <strong>Click here</strong> to Log In</a>
                   </div>
                 </form>
               </div>

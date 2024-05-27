@@ -1,4 +1,3 @@
-// App.jsx
 import { logger } from './utils'
 import logic from './logic'
 import Login from './pages/Login'

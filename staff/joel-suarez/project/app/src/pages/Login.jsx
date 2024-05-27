@@ -35,7 +35,7 @@ function Login ({ onUserLoggedIn, onRegisterClick}) {
     }
 
     return <div className="row justify-content-center">
-  <div className="col-md-6">
+  <div className="col-md-3">
     <form className='form-login' onSubmit = {handleSubmit}>
       <h2 className="text-center mb-4" id='text-modal'>Login</h2>
       <hr id='hr-modal'></hr>
@@ -47,7 +47,7 @@ function Login ({ onUserLoggedIn, onRegisterClick}) {
       </div>
       <button type="submit" className="btn btn-primary w-100 mt-2">Log In</button>
       <div className="text-center mt-2">
-      <a style={{ color: 'orange' }}  onClick={handleRegisterClick}>You don't have an account? <strong>Click here</strong> to Register</a>
+      <a style={{ color: '#68daf7' }}  onClick={handleRegisterClick}>You don't have an account? <strong>Click here</strong> to Register</a>
       </div>
     </form>
   </div>

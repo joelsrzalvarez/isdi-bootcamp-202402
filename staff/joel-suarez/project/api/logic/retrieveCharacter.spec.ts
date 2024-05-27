@@ -1,47 +1,55 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
 import mongoose from 'mongoose';
-import { Character } from '../data/index.ts'; 
+import { Character } from '../data/index.ts';
 import logic from './index.ts';
 import { expect } from 'chai';
-import { errors } from 'com'; 
+import { errors } from 'com';
 
-const { NotFoundError, SystemError } = errors;
+dotenv.config();
+
+const { Types: { ObjectId } } = mongoose;
+const { NotFoundError } = errors;
 
 describe('retrieveCharacter', () => {
+    before(() => mongoose.connect(process.env.MONGODB_TEST_URL));
 
-    before(() => mongoose.connect(process.env.MONGODB_TEST_URL))
+    beforeEach(() => Character.deleteMany());
 
-    beforeEach(async () => {
-        await Character.deleteMany({});
+    after(() => mongoose.disconnect());
+
+    it('retrieves existing character for a given user ID', async () => {
+        const userId = '664b493ef40ab9f4be55721f';
+        const characterData = [
+            { user_id: userId, name: 'Character1', clase: 'Warrior', win_streak: 5, max_win_streak: 0  },
+            { user_id: userId, name: 'Character2', clase: 'Mage', win_streak: 3, max_win_streak: 0  }
+        ];
+
+        await Character.create(characterData);
+
+        const characters = await logic.retrieveCharacter(userId);
+        
+        expect(characters).to.have.lengthOf(2);
+        expect(characters[0]).to.include({ name: 'Character1', clase: 'Warrior', win_streak: 5, max_win_streak: 0 });
+        expect(characters[1]).to.include({ name: 'Character2', clase: 'Mage', win_streak: 3,  max_win_streak: 0 });
     });
 
-    it('retrieves existing characters', async () => {
-        const user_id = new mongoose.Types.ObjectId();
-        await Character.create({ name: 'Hero', user_id: user_id.toString(), page: '1' });
-        
-        const characters = await logic.retrieveCharacter(user_id.toString(), '1');
-        expect(characters).to.have.lengthOf(1);
-        expect(characters[0].name).to.equal('Hero');
-    });
+    it('no characters are found for a given userid', async () => {
+        const userId = '664b493ef40ab9f4be55721f';
 
-    it('throws NotFoundError if no characters are found', async () => {
-        const user_id = new mongoose.Types.ObjectId();
-        
         try {
-            await logic.retrieveCharacter(user_id.toString(), '1');
+            await logic.retrieveCharacter(userId);
         } catch (error) {
             expect(error).to.be.instanceOf(NotFoundError);
-            expect(error.message).to.equal('No characters found for the given user and page');
         }
     });
 
-    afterEach(async () => {
-        await Character.deleteMany({});
-    });
+    it('error occurs while retrieving characters', async () => {
+        const userId = 'invalidUserId';
 
-    after(async () => {
-        await mongoose.disconnect();
+        try {
+            await logic.retrieveCharacter(userId);
+        } catch (error) {
+            expect(error).to.be.instanceOf(errors.SystemError);
+        }
     });
 });

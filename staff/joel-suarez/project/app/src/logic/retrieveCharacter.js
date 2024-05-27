@@ -19,8 +19,6 @@ function retrieveCharacter(userId) {
         .reject(new Error('Token user ID does not match requested user ID'));
     }
 
-    console.log('APP > logic', userId);
-
     return fetch(`http://localhost:9000/characters?userId=${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.token}`
@@ -28,7 +26,6 @@ function retrieveCharacter(userId) {
     })
     .then(res => {
         if (res.status === 200) {
-            console.log('APP > logic', res.status);
             return res.json();
         } else {
             throw new Error(`Failed to fetch, error status: ${res.status}`);

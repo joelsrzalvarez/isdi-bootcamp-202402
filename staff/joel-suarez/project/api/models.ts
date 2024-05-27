@@ -10,6 +10,8 @@ type UserType = {
     email: string
     username: string
     password: string
+    honor_points: number
+    arena_points: number
 }
 
 
@@ -29,6 +31,14 @@ const user = new Schema({
     },
     password: {
         type: String,
+        required: true
+    },
+    honor_points: {
+        type: Number,
+        required: true
+    },
+    arena_points: {
+        type: Number,
         required: true
     }
 })

@@ -1,12 +1,11 @@
 import mongoose from 'mongoose'
 
-import { User } from '.'
+import { Shop } from './index.ts'
 
 
 mongoose.connect('mongodb://localhost:27017/arenaofhonor')
-    .then(() => User.deleteMany())
-    .then(() => User.create({ name: 'Katsu', surname: 'Don', email: 'katsu@don.com', password: '123qwe123' }))
+    .then(() => Shop.create({name: 'Sword Shop',price: 1000,type: ['arena_points', 'honor_points']})
     
     .then(() => mongoose.disconnect())
     .then(() => console.log('populated'))
-    .catch(console.error)
+    .catch(console.error))

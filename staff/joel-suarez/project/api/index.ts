@@ -52,9 +52,9 @@ mongoose.connect(MONGODB_URL)
 
     api.post('/users', jsonBodyParser, (req, res) => {
         try {
-            const { name, surname, email, password } = req.body
+            const { name, surname, email, password, honor_points, arena_points } = req.body
 
-            logic.registerUser(name, surname, email, password)
+            logic.registerUser(name, surname, email, password, honor_points, arena_points)
                 .then(() => res.status(201).send())
                 .catch(error => {
                     if (error instanceof SystemError) {
@@ -142,6 +142,18 @@ mongoose.connect(MONGODB_URL)
         }
     })
 
+    api.post('/shop/buyArenaPoints', async (req, res) => {
+        const { userId, quantity } = req.body;
+    
+        try {
+            const newArenaPoints = await logic.buyArenaPoints(userId, quantity);
+            res.status(200).json({ message: 'Arena points purchased successfully', arena_points: newArenaPoints });
+        } catch (error) {
+            console.error('Error purchasing arena points:', error);
+            res.status(500).json({ message: error.message });
+        }
+    });
+
     api.get('/users/:targetUserId', (req, res) => {
         try {
             const { authorization } = req.headers
@@ -197,7 +209,53 @@ mongoose.connect(MONGODB_URL)
                 res.status(500).json({ error: SystemError.name, message: 'An unexpected error occurred' });
             }
         }
-    });        
+    });
+
+    api.put('/characters/:playerId/:loserId/updateWins', async (req, res) => {
+        const { playerId, loserId } = req.params;
+    
+        try {
+            await logic.updateWins(playerId, loserId);
+            res.status(200).json({ message: 'Win streak updated successfully' });
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                logger.warn(error.message);
+                res.status(404).json({ error: error.constructor.name, message: error.message });
+            } else {
+                logger.error('Unexpected error occurred', error.message);
+                res.status(500).json({ error: SystemError.name, message: 'An unexpected error occurred' });
+            }
+        }
+    });
+    
+
+    api.get('/characters/ranking', async (req, res) => {
+        try {
+          const characters = await logic.retrieveRanking(); 
+          res.status(200).json(characters);
+        } catch (error) {
+          res.status(500).json({ message: 'Error retrieving characters', error });
+        }
+    });
+
+    api.get('/shop', async (req, res) => {
+        try {
+            const shop = await logic.retrieveShop();
+            res.status(200).json(shop);
+        } catch (error) {
+            res.status(500).json({ message: 'Error retrieving shop', error: error.message });
+        }
+    });
+
+    api.post('/shop/buy', async (req, res) => {
+        const { userId, itemId } = req.body;
+        try {
+            await logic.buyItem(userId, itemId);
+            res.status(200).json({ message: 'Item purchased successfully' });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    });
 
     api.get('/characters', async (req, res) => {
         const { userId } = req.query;
@@ -213,26 +271,25 @@ mongoose.connect(MONGODB_URL)
         }
     });
 
-    io.on('connection', (socket) => {
-        console.log(socket.id);
-        let globalRoomId = '';
-        // socket.on('startGame', (roomId) => {
-        //     console.log(`Starting game in room: ${roomId}`);
-        //     let timeLeft = 60;
-        //     const timerId = setInterval(() => {
-        //         timeLeft--;
-        //         io.to(roomId).emit('timer', { timeLeft });
+    api.get('/characters/elo', jsonBodyParser, async (req, res) => {
+        const { userId } = req.query;
     
-        //         if (timeLeft <= 0) {
-        //             clearInterval(timerId);
-        //             io.to(roomId).emit('timeUp', { message: 'Time is up!' });
-        //         }
-        //     }, 1000);
-        // });
+        try {
+            const elos = await logic.getEloFromCharacter(userId);
+            res.status(200).json(elos);
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                res.status(404).json({ error: error.constructor.name, message: error.message });
+            } else {
+                res.status(500).json({ error: SystemError.name, message: 'An unexpected error occurred' });
+            }
+        }
+    });
 
-        socket.on('findMatch', (idPlayer) => {
-            logic.handleMatchMaking(io, socket, idPlayer);
-        });     
+    io.on('connection', (socket) => {    
+        socket.on('findMatch', ({ id, skin, name }) => {
+            logic.handleMatchMaking(io, socket, { idPlayer: id, skin: skin, name: name });
+        });
     
         socket.on('disconnect', () => {
             logger.info(`User ${socket.id} has disconnected`);

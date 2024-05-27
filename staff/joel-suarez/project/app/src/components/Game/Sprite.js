@@ -39,7 +39,6 @@ class Sprite {
         }
     }
 
-    // Update the sprite every frame.
     update() {
         this.draw();
         this.animateFrames();
